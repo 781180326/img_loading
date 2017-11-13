@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>图片预加载</title>
+<meta charset="utf-8" />
+<script>
+	/* 1、先把所有图片加载完成，然后一个一个快速看
+	 * 2、先看一张图片，然后看完，看完以后再去加载下一张
+	 *
+	 * 一般都是：
+	 *  在页面刚打开的时候，我们去加载第一张图片，然后加载完成后，在用户看的时间内，去加载后面的内容，那么我们必须有个工具（Image对象）
+	 */
+	 /*
+	 *属性：
+	 *src:当我们给Image对象的src属性赋值一个url的时候，这个Image对象就会去加载url资源，加载完成后的资源被保存到了浏览器的缓存文件夹里面，下次如果我们去调用这个uql地址的时候，直接是从缓存文件夹读取到的，所以速度很快。
+	 *
+	 *onload:当资源加载完成的时候触发
+	 *onerror:当资源加载出错的时候触发
+	 */	
+	 
+window.onload = function(){
+	var oImg= document.getElementById('img');
+	var oImage = new Image();
+	var arr = [
+		"http://img4.imgtn.bdimg.com/it/u=406781832,3864498238&fm=27&gp=0.jpg",
+		"http://img5.imgtn.bdimg.com/it/u=3085100352,1304284095&fm=11&gp=0.jpg",
+		"http://img0.imgtn.bdimg.com/it/u=741339486,3876155734&fm=27&gp=0.jpg"
+	];
+	var icur = 0, i = 0;
+	
+	//先加载一张图片，加载完成后执行递归函数（进行图片预加载）
+    oImage.src = arr[i];
+    oImage.onload = function(){
+		  oImg.src = arr[i];
+		  getImg();
+	}
+	oImg.onclick = function(){
+		  ++i == arr.length ? i = 0: null ;
+		  this.src = arr[i];
+		  return false; 
+	}
+	  
+	
+	function getImg(){
+		oImage.src = arr[icur];
+		oImage.onload = function(){
+			icur++;
+			if(icur < arr.length){
+				getImg();
+			}  
+			document.title = icur + '/'+ arr.length;
+		}
+	}
+	  
+}
+</script>
+</head>
+<body>
+	<img src="" id="img" style="width:300px;height:300px;"/>
+</body>
+</html>

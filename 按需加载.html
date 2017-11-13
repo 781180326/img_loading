@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>图片预加载</title>
+<meta charset="utf-8" />
+<style>
+ ul{margin:100px auto;}
+ li{list-style:none;float:left;margin:0 0 10px 10px;border:1px solid black;}
+ img{display:block;width:300px;height:200px;}
+</style>
+<script>
+	/* 按需加载：
+	 * 	原理：给每个图片加上一个自定义的 _src 属性，用来存图片的地址
+	 *		 定义一个函数，这个函数中for循环所有图片
+	 *       当可视区高度+滚动高度 > 图片到页面顶部的距离  将图片的自定义属性中的值放入图片的 src 
+	 * 		 还要注意一点：当页面滚动时触发函数，所以在任何时候只要页面滚动就会触发这个函数，然后这个函数就会进行循环、判断...我们需要当图片加载完以后不再触发它，或者当图片加载完成就在for循环中将它去除。
+	 */	
+	 
+window.onload = function(){
+	var oUl = document.getElementById('ul');
+	var aImg = oUl.getElementsByTagName('img');
+	var arr_img = [];
+	var i, len;
+	
+	//复制一个数组出来，用这个数组进行数组的删除（当一个图片被加载过，将这个图片从数组删除） 
+	for( i = 0; i < aImg.length; i++){
+		arr_img.push(aImg[i]);
+	}
+	len = arr_img.length;
+	
+	
+	loading();
+	window.onscroll = loading;
+	
+	function loading(){
+		var scorllTop = document.documentElement.scrollTop || document.body.scrollTop;
+		var iHeight = document.documentElement.clientHeight || document.body.clientHeight;
+		
+		for( i = 0; i < len; i++ ){
+			if( getTop(arr_img[i]) < (scorllTop + iHeight) ){
+				arr_img[i].src = arr_img[i].dataset.src;
+				arr_img.splice(i--,1);
+				len = arr_img.length;
+			}
+		}
+	}
+	
+	function getTop( obj ){
+		var iTop = 0;
+		while(obj){
+			iTop += obj.offsetTop;
+			obj = obj.offsetParent;	
+		}	
+		return iTop;
+	}
+}
+</script>
+</head>
+<body>
+    <ul id="ul">
+    	<!-- 给图片加上一个白色无内容图片，用来初始化样式，如果src没有值，界面会很丑陋 -->
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+        <li><img src="1.gif" data-src="a.png" /></li>
+		<li><img src="1.gif" data-src="a.png" /></li>  
+        <li><img src="1.gif" data-src="a.png" /></li> 
+    </ul>
+</body>
+</html>
